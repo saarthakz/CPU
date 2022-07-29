@@ -6,8 +6,8 @@ Instruction Set:
   1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
   3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg, imm8/reg       -> reg = PORT[imm8/reg]
-  5: OUT imm8/reg, reg       -> PORT[imm8/reg] = reg
+  4: IN  reg, addr           -> reg = PORT[addr]
+  5: OUT addr, reg           -> PORT[addr] = reg
   6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
   7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
   8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
@@ -28,3 +28,12 @@ Syntax:
 Boundaries:
   Addresses & Immediate values can only be in the range of [0,255]
 */
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+const node_fs_1 = __importDefault(require("node:fs"));
+const data = node_fs_1.default.readFileSync("Output.bin");
+const dataDec = new Array(data.length);
+data.forEach((val, idx) => dataDec[idx] = val);
+console.log(dataDec);

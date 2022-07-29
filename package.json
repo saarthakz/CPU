@@ -4,6 +4,7 @@
   },
   "scripts": {
     "start": "tsc && node dist/Assembler.js",
-    "test": "tsc && node dist/Test.js"
+    "test": "tsc && node dist/Test.js",
+    "vm": "tsc && node dist/VM.js"
   }
 }

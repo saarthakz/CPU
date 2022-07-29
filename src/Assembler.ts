@@ -5,8 +5,8 @@ Instruction Set:
   1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
   3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg, imm8/reg       -> reg = PORT[imm8/reg]
-  5: OUT imm8/reg, reg       -> PORT[imm8/reg] = reg
+  4: IN  reg, addr           -> reg = PORT[addr]
+  5: OUT addr, reg           -> PORT[addr] = reg
   6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
   7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
   8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
@@ -28,12 +28,16 @@ Boundaries:
   Addresses & Immediate values can only be in the range of [0,255]
 */
 
-import processor from "./CPU";
+import { processor } from "./CPU";
+import fs from "node:fs";
+import codeLoader from "./functions/CodeLoader";
+import instructionLoader from "./functions/InstructionLoader";
+
 
 let instructions = [
   { mnemonic: 'MW', decimal: 0, opCode: 0 },
-  { mnemonic: 'SW', decimal: 1, opCode: 1 },
-  { mnemonic: 'LW', decimal: 2, opCode: 2 },
+  { mnemonic: 'LW', decimal: 1, opCode: 1 },
+  { mnemonic: 'SW', decimal: 2, opCode: 2 },
   { mnemonic: 'JNZ', decimal: 3, opCode: 3 },
   { mnemonic: 'IN', decimal: 4, opCode: 4 },
   { mnemonic: 'OUT', decimal: 5, opCode: 5 },
@@ -54,6 +58,16 @@ const ASCII_Map: any = {
   "#": 35,
   "&": 38,
   ",": 44,
+  "0": 48,
+  "1": 49,
+  "2": 50,
+  "3": 51,
+  "4": 52,
+  "5": 53,
+  "6": 54,
+  "7": 55,
+  "8": 56,
+  "9": 57,
   ":": 58,
   ";": 59,
   "@": 64,
@@ -85,17 +99,9 @@ const ASCII_Map: any = {
   "Z": 90,
 };
 
-instructions.forEach((instruction) => {
-  const baseAddress = instruction.decimal * 16;
-  const mnemonicBytes = instruction.mnemonic.split("").map((char) => char.charCodeAt(0));
-  let ctr = baseAddress;
-  mnemonicBytes.forEach((byte) => {
-    processor.RAM[ctr] = byte;
-    ctr++;
-  });
-});
+codeLoader(processor, "/Code.txt");
+instructionLoader(processor);
 
-import fs from "node:fs";
 let data = fs.readFileSync("./Code.txt");
 let stringData = new Array<string>(data.length);
 data.forEach((val, idx) => stringData[idx] = String.fromCharCode(val));
@@ -181,7 +187,9 @@ stringData.forEach((dataLine) => {
 
   for (let ptr = 200; ptr < addr; ptr++) bufferArr.push(processor.RAM[ptr]);
 
-  fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
+  console.log(bufferArr);
+
+  // fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
 
 });
 

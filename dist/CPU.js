@@ -4,8 +4,8 @@
   1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
   3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg, imm8/reg       -> reg = PORT[imm8/reg]
-  5: OUT imm8/reg, reg       -> PORT[imm8/reg] = reg
+  4: IN  reg, addr           -> reg = PORT[addr]
+  5: OUT addr, reg           -> PORT[addr] = reg
   6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
   7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
   8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
@@ -16,6 +16,7 @@
   D: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
 */
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.CPU = exports.processor = void 0;
 class CPU {
     constructor(RAM) {
         this.regA = 0;
@@ -28,6 +29,7 @@ class CPU {
     }
     ;
 }
+exports.CPU = CPU;
 ;
 const processor = new CPU(new Array(8192).fill(-1));
-exports.default = processor;
+exports.processor = processor;
