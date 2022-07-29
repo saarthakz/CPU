@@ -1,17 +1,20 @@
 /*
 
 Instruction Set:
-  0: MW   regA, regB       -> regA = regB
-  1: LW   regA, imm8/addr  -> reg = imm8/RAM[addr]
-  2: SW   addr, imm8/reg   -> RAM[addr] = reg/imm8
-  3: JNZ  imm8/reg addr    -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg, imm8/reg     -> reg = PORT[imm8/reg]
-  5: OUT imm8/reg, reg     -> PORT[imm8/reg] = reg
+  0: MW   regA, regB         -> regA = regB
+  1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
+  2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
+  3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
+  4: IN  reg, imm8/reg       -> reg = PORT[imm8/reg]
+  5: OUT imm8/reg, reg       -> PORT[imm8/reg] = reg
   6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
-  7: AND  regA, imm8/regB    -> regA = regA & imm8/regB
-  8: OR   regA, imm8/regB    -> regA = regA | imm8/regB
-  9: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
-  A: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
+  7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
+  8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
+  9: DIV regA, imm8/regB     -> regA = regA / imm8/regB
+  A: AND  regA, imm8/regB    -> regA = regA & imm8/regB
+  B: OR   regA, imm8/regB    -> regA = regA | imm8/regB
+  C: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
+  D: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
 
 Prefix:
   # -> Immediate
@@ -35,10 +38,13 @@ let instructions = [
   { mnemonic: 'IN', decimal: 4, opCode: 4 },
   { mnemonic: 'OUT', decimal: 5, opCode: 5 },
   { mnemonic: 'ADD', decimal: 6, opCode: 6 },
-  { mnemonic: 'AND', decimal: 7, opCode: 7 },
-  { mnemonic: 'OR', decimal: 8, opCode: 8 },
-  { mnemonic: 'NOT', decimal: 9, opCode: 9 },
-  { mnemonic: 'CMP', decimal: 10, opCode: 10 }
+  { mnemonic: 'SUB', decimal: 7, opCode: 7 },
+  { mnemonic: 'MUL', decimal: 8, opCode: 8 },
+  { mnemonic: 'DIV', decimal: 9, opCode: 9 },
+  { mnemonic: 'AND', decimal: 10, opCode: 10 },
+  { mnemonic: 'OR', decimal: 11, opCode: 11 },
+  { mnemonic: 'NOT', decimal: 12, opCode: 12 },
+  { mnemonic: 'CMP', decimal: 13, opCode: 13 }
 ];
 
 const ASCII_Map: any = {
@@ -149,8 +155,14 @@ stringData.forEach((dataLine) => {
         processor.regC = (Number(processor.regC) * 10) + Number(dataLine[dataLinePtr]);
         dataLinePtr++;
       };
-      processor.RAM[addr] = processor.regC;
-      addr++;
+
+      while (processor.regC != 0) {
+        processor.RAM[addr] = processor.regC % 16;
+        processor.regC = Math.floor(processor.regC / 16);
+        processor.RAM[addr] = (16 * processor.RAM[addr]) + processor.regC % 16;
+        processor.regC = Math.floor(processor.regC / 16);
+        addr++;
+      };
     }
     //Register value
     else if (dataLine[dataLinePtr].charCodeAt(0) == 64) {
@@ -169,7 +181,6 @@ stringData.forEach((dataLine) => {
 
   for (let ptr = 200; ptr < addr; ptr++) bufferArr.push(processor.RAM[ptr]);
 
-  fs.readFileSync("Output.bin");
   fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
 
 });

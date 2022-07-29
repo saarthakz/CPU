@@ -1,4 +1,7 @@
+"use strict";
 /*
+
+Instruction Set:
   0: MW   regA, regB         -> regA = regB
   1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
@@ -13,25 +16,15 @@
   B: OR   regA, imm8/regB    -> regA = regA | imm8/regB
   C: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
   D: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
+
+Prefix:
+  # -> Immediate
+  & -> Address
+  @ -> Register
+
+Syntax:
+  Opcode:Op1,Op2;
+
+Boundaries:
+  Addresses & Immediate values can only be in the range of [0,255]
 */
-
-class CPU {
-  RAM: Array<number>;
-  memSize: number;
-  regA: string | number = 0;
-  regB: string | number = 0;
-  regC: string | number = 0;
-  regD: string | number = 0;
-  PC: string | number = 0;
-
-  constructor(RAM: Array<number>) {
-    this.RAM = RAM;
-    this.memSize = RAM.length;
-  };
-
-};
-
-const processor = new CPU(new Array<number>(8192).fill(-1));
-export default processor;
-
-
