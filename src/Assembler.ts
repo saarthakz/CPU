@@ -23,33 +23,16 @@ Prefix:
 
 Syntax:
   Opcode:Op1,Op2;
+  Operands need to be in Big Endian Format
 
 Boundaries:
-  Addresses & Immediate values can only be in the range of [0,255]
+  Addresses & Immediate values can only be in the range of [0,65535]
 */
 
-import { processor } from "./CPU";
 import fs from "node:fs";
+import { processor } from "./CPU";
 import codeLoader from "./functions/CodeLoader";
 import instructionLoader from "./functions/InstructionLoader";
-
-
-let instructions = [
-  { mnemonic: 'MW', decimal: 0, opCode: 0 },
-  { mnemonic: 'LW', decimal: 1, opCode: 1 },
-  { mnemonic: 'SW', decimal: 2, opCode: 2 },
-  { mnemonic: 'JNZ', decimal: 3, opCode: 3 },
-  { mnemonic: 'IN', decimal: 4, opCode: 4 },
-  { mnemonic: 'OUT', decimal: 5, opCode: 5 },
-  { mnemonic: 'ADD', decimal: 6, opCode: 6 },
-  { mnemonic: 'SUB', decimal: 7, opCode: 7 },
-  { mnemonic: 'MUL', decimal: 8, opCode: 8 },
-  { mnemonic: 'DIV', decimal: 9, opCode: 9 },
-  { mnemonic: 'AND', decimal: 10, opCode: 10 },
-  { mnemonic: 'OR', decimal: 11, opCode: 11 },
-  { mnemonic: 'NOT', decimal: 12, opCode: 12 },
-  { mnemonic: 'CMP', decimal: 13, opCode: 13 }
-];
 
 const ASCII_Map: any = {
   "\n": 10,
@@ -99,99 +82,91 @@ const ASCII_Map: any = {
   "Z": 90,
 };
 
-codeLoader(processor, "/Code.txt");
 instructionLoader(processor);
+codeLoader(processor, "/Code.txt");
 
-let data = fs.readFileSync("./Code.txt");
-let stringData = new Array<string>(data.length);
-data.forEach((val, idx) => stringData[idx] = String.fromCharCode(val));
+let RAM_Addr = 4000;
+let addr = 200;
+let instructionCount = 14;
 
-stringData = stringData.join("").split("\r\n");
+while (processor.RAM[RAM_Addr] != -1) {
 
-stringData.forEach((dataLine) => {
-
-  let dataLinePtr = 0;
-
-  for (let _idx = 0; _idx < instructions.length; _idx++) {
-    const instruction = instructions[_idx];
-    const baseAddress = instruction.decimal * 16;
+  //Getting the Opcode and storing in Register B
+  for (let opCode = 0; opCode < instructionCount; opCode++) {
+    const baseAddress = opCode * 16;
     let RAM_Ctr = baseAddress;
-    let ctr = 0;
     processor.regA = 1;
     while (processor.RAM[RAM_Ctr] != -1) {
-      if (processor.RAM[RAM_Ctr] != dataLine[ctr].charCodeAt(0)) {
+      if (processor.RAM[RAM_Ctr] != processor.RAM[RAM_Addr]) {
         processor.regA = 0;
         break;
       }
       RAM_Ctr++;
-      ctr++;
+      RAM_Addr++;
     };
     if (processor.regA == 1) {
-      processor.regB = instruction.opCode;
-      dataLinePtr = ctr;
+      processor.regB = opCode;
       break;
     };
   };
 
-  //Invalid Instruction if Register B Value == 0
+  RAM_Addr++;
 
-  //Opcode in Register B & Byte Pointer in Variable: dataLinePtr
-
-  //Storing Operands in RAM from address 200 onwards
+  while (processor.RAM[RAM_Addr] != 59) {
 
 
-  let addr = 200;
-  dataLinePtr++;
-
-  while (dataLine[dataLinePtr].charCodeAt(0) != 59) {
-
-    if (dataLine[dataLinePtr].charCodeAt(0) == 44) {
-      dataLinePtr++;
+    if (processor.RAM[RAM_Addr] == 44) {
+      RAM_Addr++;
       continue;
     };
 
     //Immediate value or Address Value
-    if (dataLine[dataLinePtr].charCodeAt(0) == 35 || dataLine[dataLinePtr].charCodeAt(0) == 38) {
-      processor.RAM[addr] = dataLine[dataLinePtr].charCodeAt(0);
+    if (processor.RAM[RAM_Addr] == 35 || processor.RAM[RAM_Addr] == 38) {
+      processor.RAM[addr] = processor.RAM[RAM_Addr];
       addr++;
-      dataLinePtr++;
-      processor.regC = Number(dataLine[dataLinePtr]);
-      dataLinePtr++;
-      while (dataLine[dataLinePtr].charCodeAt(0) != 44 && dataLine[dataLinePtr].charCodeAt(0) != 59) {
-        processor.regC = (Number(processor.regC) * 10) + Number(dataLine[dataLinePtr]);
-        dataLinePtr++;
-      };
-
-      while (processor.regC != 0) {
-        processor.RAM[addr] = processor.regC % 16;
-        processor.regC = Math.floor(processor.regC / 16);
-        processor.RAM[addr] = (16 * processor.RAM[addr]) + processor.regC % 16;
-        processor.regC = Math.floor(processor.regC / 16);
-        addr++;
+      RAM_Addr++;
+      processor.regC = processor.RAM[RAM_Addr] - 48;
+      RAM_Addr++;
+      while (processor.RAM[RAM_Addr] != 44 && processor.RAM[RAM_Addr] != 59) {
+        processor.regC = processor.regC * 10 + (processor.RAM[RAM_Addr] - 48);
+        RAM_Addr++;
       };
     }
     //Register value
-    else if (dataLine[dataLinePtr].charCodeAt(0) == 64) {
-
-      while (dataLine[dataLinePtr].charCodeAt(0) != 44 && dataLine[dataLinePtr].charCodeAt(0) != 59) {
-        processor.RAM[addr] = dataLine[dataLinePtr].charCodeAt(0);
-        addr++;
-        dataLinePtr++;
-      };
-
+    else if (processor.RAM[RAM_Addr] == 64) {
+      processor.RAM[addr] = processor.RAM[RAM_Addr];
+      addr++;
+      RAM_Addr++;
+      processor.regC = processor.RAM[RAM_Addr] - 64;
+      RAM_Addr++;
     };
 
+    processor.regD = addr;
+
+    while (processor.regC != 0) {
+      processor.RAM[addr] = processor.regC % 16;
+      processor.regC = Math.floor(processor.regC / 16);
+      processor.RAM[addr] += (16 * (processor.regC % 16));
+      processor.regC = Math.floor(processor.regC / 16);
+      addr++;
+    };
+
+    if (processor.regD + 1 == addr) {
+      processor.RAM[addr] = 0;
+      addr++;
+    };
   };
 
-  const bufferArr = [Number(processor.regB)];
+  RAM_Addr++;
+};
 
-  for (let ptr = 200; ptr < addr; ptr++) bufferArr.push(processor.RAM[ptr]);
+const bufferArr = [Number(processor.regB)];
 
-  console.log(bufferArr);
+for (let ptr = 200; ptr < addr; ptr++) bufferArr.push(processor.RAM[ptr]);
 
-  // fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
+console.log(bufferArr);
+console.log(Buffer.from(bufferArr));
 
-});
 
-
+// fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
 

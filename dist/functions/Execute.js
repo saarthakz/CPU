@@ -1,4 +1,8 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /*
+
+Instruction Set:
   0: MW   regA, regB         -> regA = regB
   1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
@@ -13,25 +17,19 @@
   B: OR   regA, imm8/regB    -> regA = regA | imm8/regB
   C: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
   D: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
+
+Prefix:
+  # -> Immediate
+  & -> Address
+  @ -> Register
+
+Syntax:
+  Opcode:Op1,Op2;
+  Operands need to be in Big Endian Format
+
+Boundaries:
+  Addresses & Immediate values can only be in the range of [0,65535]
 */
-
-class CPU {
-  RAM: Array<number>;
-  memSize: number;
-  regA: number = 0;
-  regB: number = 0;
-  regC: number = 0;
-  regD: number = 0;
-  PC: number = 0;
-
-  constructor(RAM: Array<number>) {
-    this.RAM = RAM;
-    this.memSize = RAM.length;
-  };
-
-};
-
-const processor = new CPU(new Array<number>(8192).fill(-1));
-export { processor, CPU };
-
-
+function execute(processor, opCode, first, second) {
+}
+exports.default = execute;
