@@ -54,63 +54,73 @@ const ASCII_Map: any = {
 instructionLoader(processor);
 codeLoader(processor, "/Code.txt");
 
-let RAM_Addr = 4000;
+let CodeAddr = 4000;
 let addr = 200;
 let instructionCount = 14;
 
-while (processor.RAM[RAM_Addr] != -1) {
+while (processor.RAM[CodeAddr] != -1) {
 
   //Getting the Opcode and storing in Register B
   for (let opCode = 0; opCode < instructionCount; opCode++) {
     const baseAddress = opCode * 16;
     let RAM_Ctr = baseAddress;
+    let codePtr = CodeAddr;
     processor.regA = 1;
     while (processor.RAM[RAM_Ctr] != -1) {
-      if (processor.RAM[RAM_Ctr] != processor.RAM[RAM_Addr]) {
+      if (processor.RAM[RAM_Ctr] != processor.RAM[codePtr]) {
         processor.regA = 0;
         break;
       }
       RAM_Ctr++;
-      RAM_Addr++;
+      codePtr++;
     };
     if (processor.regA == 1) {
       processor.regB = opCode;
+      CodeAddr = codePtr;
       break;
-    };
+    }
   };
 
-  RAM_Addr++;
+  processor.RAM[addr] = processor.regB;
+  addr++;
 
-  while (processor.RAM[RAM_Addr] != 59) {
+  CodeAddr++;
 
+  while (processor.RAM[CodeAddr] != 59) {
 
-    if (processor.RAM[RAM_Addr] == 44) {
-      RAM_Addr++;
+    if (processor.RAM[CodeAddr] == 44) {
+      CodeAddr++;
       continue;
     };
 
     //Immediate value or Address Value
-    if (processor.RAM[RAM_Addr] == 35 || processor.RAM[RAM_Addr] == 38) {
-      processor.RAM[addr] = processor.RAM[RAM_Addr];
+    if (processor.RAM[CodeAddr] == 35 || processor.RAM[CodeAddr] == 38) {
+      processor.RAM[addr] = processor.RAM[CodeAddr];
       addr++;
-      RAM_Addr++;
-      processor.regC = processor.RAM[RAM_Addr] - 48;
-      RAM_Addr++;
-      while (processor.RAM[RAM_Addr] != 44 && processor.RAM[RAM_Addr] != 59) {
-        processor.regC = processor.regC * 10 + (processor.RAM[RAM_Addr] - 48);
-        RAM_Addr++;
+      CodeAddr++;
+
+      processor.regC = processor.RAM[CodeAddr] - 48;
+      CodeAddr++;
+      while (processor.RAM[CodeAddr] != 44 && processor.RAM[CodeAddr] != 59) {
+        processor.regC = processor.regC * 10 + (processor.RAM[CodeAddr] - 48);
+        CodeAddr++;
       };
     }
     //Register value
-    else if (processor.RAM[RAM_Addr] == 64) {
-      processor.RAM[addr] = processor.RAM[RAM_Addr];
+    else if (processor.RAM[CodeAddr] == 64) {
+      processor.RAM[addr] = processor.RAM[CodeAddr];
       addr++;
-      RAM_Addr++;
-      processor.regC = processor.RAM[RAM_Addr] - 64;
-      RAM_Addr++;
+      CodeAddr++;
+      processor.regC = processor.RAM[CodeAddr] - 64;
+      CodeAddr++;
     };
 
     processor.regD = addr;
+
+    if (processor.regC == 0) {
+      processor.RAM[addr] = 0;
+      addr++;
+    };
 
     while (processor.regC != 0) {
       processor.RAM[addr] = processor.regC % 16;
@@ -124,14 +134,22 @@ while (processor.RAM[RAM_Addr] != -1) {
       processor.RAM[addr] = 0;
       addr++;
     };
+
+    if (processor.regD == addr) {
+      processor.RAM[addr] = 0;
+      addr++;
+    };
+
   };
 
-  RAM_Addr++;
+  CodeAddr++;
 };
 
-const bufferArr = [Number(processor.regB)];
+const bufferArr = [];
 
 for (let ptr = 200; ptr < addr; ptr++) bufferArr.push(processor.RAM[ptr]);
+
+fs.writeFileSync("Output.bin", Buffer.from([]));
 
 fs.writeFileSync("Output.bin", Buffer.concat([fs.readFileSync("Output.bin"), Buffer.from(bufferArr)]));
 

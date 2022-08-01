@@ -25,5 +25,7 @@ Syntax:
 
   NOTE: For IN, OUT, first operand is an address, second operand MUST be #0 always
 
+  NOTE FOR JUMP: Each Ith Assembly Instruction is at Address: 4000 + (7 * I) 
+
 Boundaries:
   Addresses & Immediate values can only be in the range of [0,65535]

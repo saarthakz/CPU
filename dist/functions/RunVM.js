@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -54,16 +63,17 @@ const ASCII_Map = {
     "Z": 90,
 };
 function runVM(processor) {
-    (0, BinaryLoader_1.default)(processor);
-    while (processor.RAM[processor.PC] != -1) {
-        let opCode = processor.RAM[processor.PC];
-        processor.PC++;
-        let first = (0, GetOperand_1.default)(processor);
-        let second = (0, GetOperand_1.default)(processor);
-        console.log(opCode, first, second);
-        (0, Execute_1.default)(processor, opCode, first, second);
-    }
-    ;
+    return __awaiter(this, void 0, void 0, function* () {
+        (0, BinaryLoader_1.default)(processor);
+        while (processor.RAM[processor.PC] != -1) {
+            let opCode = processor.RAM[processor.PC];
+            processor.PC++;
+            let first = (0, GetOperand_1.default)(processor);
+            let second = (0, GetOperand_1.default)(processor);
+            yield (0, Execute_1.default)(processor, opCode, first, second);
+        }
+        ;
+    });
 }
 exports.default = runVM;
 ;

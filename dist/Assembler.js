@@ -56,61 +56,69 @@ const ASCII_Map = {
 };
 (0, InstructionLoader_1.default)(CPU_1.processor);
 (0, CodeLoader_1.default)(CPU_1.processor, "/Code.txt");
-let RAM_Addr = 4000;
+let CodeAddr = 4000;
 let addr = 200;
 let instructionCount = 14;
-while (CPU_1.processor.RAM[RAM_Addr] != -1) {
+while (CPU_1.processor.RAM[CodeAddr] != -1) {
     //Getting the Opcode and storing in Register B
     for (let opCode = 0; opCode < instructionCount; opCode++) {
         const baseAddress = opCode * 16;
         let RAM_Ctr = baseAddress;
+        let codePtr = CodeAddr;
         CPU_1.processor.regA = 1;
         while (CPU_1.processor.RAM[RAM_Ctr] != -1) {
-            if (CPU_1.processor.RAM[RAM_Ctr] != CPU_1.processor.RAM[RAM_Addr]) {
+            if (CPU_1.processor.RAM[RAM_Ctr] != CPU_1.processor.RAM[codePtr]) {
                 CPU_1.processor.regA = 0;
                 break;
             }
             RAM_Ctr++;
-            RAM_Addr++;
+            codePtr++;
         }
         ;
         if (CPU_1.processor.regA == 1) {
             CPU_1.processor.regB = opCode;
+            CodeAddr = codePtr;
             break;
         }
-        ;
     }
     ;
-    RAM_Addr++;
-    while (CPU_1.processor.RAM[RAM_Addr] != 59) {
-        if (CPU_1.processor.RAM[RAM_Addr] == 44) {
-            RAM_Addr++;
+    CPU_1.processor.RAM[addr] = CPU_1.processor.regB;
+    addr++;
+    CodeAddr++;
+    while (CPU_1.processor.RAM[CodeAddr] != 59) {
+        if (CPU_1.processor.RAM[CodeAddr] == 44) {
+            CodeAddr++;
             continue;
         }
         ;
         //Immediate value or Address Value
-        if (CPU_1.processor.RAM[RAM_Addr] == 35 || CPU_1.processor.RAM[RAM_Addr] == 38) {
-            CPU_1.processor.RAM[addr] = CPU_1.processor.RAM[RAM_Addr];
+        if (CPU_1.processor.RAM[CodeAddr] == 35 || CPU_1.processor.RAM[CodeAddr] == 38) {
+            CPU_1.processor.RAM[addr] = CPU_1.processor.RAM[CodeAddr];
             addr++;
-            RAM_Addr++;
-            CPU_1.processor.regC = CPU_1.processor.RAM[RAM_Addr] - 48;
-            RAM_Addr++;
-            while (CPU_1.processor.RAM[RAM_Addr] != 44 && CPU_1.processor.RAM[RAM_Addr] != 59) {
-                CPU_1.processor.regC = CPU_1.processor.regC * 10 + (CPU_1.processor.RAM[RAM_Addr] - 48);
-                RAM_Addr++;
+            CodeAddr++;
+            CPU_1.processor.regC = CPU_1.processor.RAM[CodeAddr] - 48;
+            CodeAddr++;
+            while (CPU_1.processor.RAM[CodeAddr] != 44 && CPU_1.processor.RAM[CodeAddr] != 59) {
+                CPU_1.processor.regC = CPU_1.processor.regC * 10 + (CPU_1.processor.RAM[CodeAddr] - 48);
+                CodeAddr++;
             }
             ;
         }
         //Register value
-        else if (CPU_1.processor.RAM[RAM_Addr] == 64) {
-            CPU_1.processor.RAM[addr] = CPU_1.processor.RAM[RAM_Addr];
+        else if (CPU_1.processor.RAM[CodeAddr] == 64) {
+            CPU_1.processor.RAM[addr] = CPU_1.processor.RAM[CodeAddr];
             addr++;
-            RAM_Addr++;
-            CPU_1.processor.regC = CPU_1.processor.RAM[RAM_Addr] - 64;
-            RAM_Addr++;
+            CodeAddr++;
+            CPU_1.processor.regC = CPU_1.processor.RAM[CodeAddr] - 64;
+            CodeAddr++;
         }
         ;
         CPU_1.processor.regD = addr;
+        if (CPU_1.processor.regC == 0) {
+            CPU_1.processor.RAM[addr] = 0;
+            addr++;
+        }
+        ;
         while (CPU_1.processor.regC != 0) {
             CPU_1.processor.RAM[addr] = CPU_1.processor.regC % 16;
             CPU_1.processor.regC = Math.floor(CPU_1.processor.regC / 16);
@@ -124,12 +132,18 @@ while (CPU_1.processor.RAM[RAM_Addr] != -1) {
             addr++;
         }
         ;
+        if (CPU_1.processor.regD == addr) {
+            CPU_1.processor.RAM[addr] = 0;
+            addr++;
+        }
+        ;
     }
     ;
-    RAM_Addr++;
+    CodeAddr++;
 }
 ;
-const bufferArr = [Number(CPU_1.processor.regB)];
+const bufferArr = [];
 for (let ptr = 200; ptr < addr; ptr++)
     bufferArr.push(CPU_1.processor.RAM[ptr]);
+node_fs_1.default.writeFileSync("Output.bin", Buffer.from([]));
 node_fs_1.default.writeFileSync("Output.bin", Buffer.concat([node_fs_1.default.readFileSync("Output.bin"), Buffer.from(bufferArr)]));

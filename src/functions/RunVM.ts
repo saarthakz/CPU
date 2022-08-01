@@ -52,7 +52,7 @@ const ASCII_Map: any = {
   "Z": 90,
 };
 
-export default function runVM(processor: CPU) {
+export default async function runVM(processor: CPU) {
   binaryLoader(processor);
 
   while (processor.RAM[processor.PC] != -1) {
@@ -60,7 +60,6 @@ export default function runVM(processor: CPU) {
     processor.PC++;
     let first = getOperand(processor);
     let second = getOperand(processor);
-
-    execute(processor, opCode, first, second);
+    await execute(processor, opCode, first, second);
   };
 };

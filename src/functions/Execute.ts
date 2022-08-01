@@ -19,7 +19,7 @@ type input = {
   identifier: number,
 };
 
-export default function execute(processor: CPU, opCode: number, first: input, second: input): void {
+export default async function execute(processor: CPU, opCode: number, first: input, second: input): Promise<void> {
   let instructionMap: any = {
     0: moveWord,
     1: loadWord,
@@ -38,6 +38,7 @@ export default function execute(processor: CPU, opCode: number, first: input, se
   };
 
   const func = instructionMap[opCode];
-  console.log(func);
+
+  await func(processor, first, second);
 
 };
