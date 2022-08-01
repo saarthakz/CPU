@@ -8,7 +8,7 @@ function binaryLoader(processor) {
     let addr = 4000;
     const data = node_fs_1.default.readFileSync("Output.bin");
     data.forEach((num, idx) => processor.RAM[addr + idx] = num);
-    return addr;
+    processor.PC = addr;
 }
 exports.default = binaryLoader;
 ;

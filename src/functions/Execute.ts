@@ -1,41 +1,43 @@
 import { CPU } from "../CPU";
+import add from "../instructions/Add";
+import divide from "../instructions/Divide";
+import jumpIfNotZero from "../instructions/JumpIfNotZero";
+import loadWord from "../instructions/LoadWord";
+import bitwiseAND from "../instructions/BitwiseAND";
+import bitwiseNOT from "../instructions/BitwiseNOT";
+import bitwiseOR from "../instructions/BitwiseOR";
+import moveWord from "../instructions/MoveWord";
+import multiply from "../instructions/Multiply";
+import storeWord from "../instructions/StoreWord";
+import subtract from "../instructions/Subtract";
+import userInput from "../instructions/UserInput";
+import userOutput from "../instructions/UserOutput";
+import compare from "../instructions/Compare";
 
 type input = {
   operand: number,
   identifier: number,
 };
 
-/*
-
-Instruction Set:
-  0: MW   regA, regB         -> regA = regB
-  1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
-  2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
-  3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg, addr           -> reg = PORT[addr]
-  5: OUT addr, reg           -> PORT[addr] = reg
-  6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
-  7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
-  8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
-  9: DIV regA, imm8/regB     -> regA = regA / imm8/regB
-  A: AND  regA, imm8/regB    -> regA = regA & imm8/regB
-  B: OR   regA, imm8/regB    -> regA = regA | imm8/regB
-  C: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
-  D: CMP regA, imm8/regB     -> regA = reg XOR imm8/regB
-
-Prefix:
-  # -> Immediate
-  & -> Address
-  @ -> Register
-
-Syntax:
-  Opcode:Op1,Op2;
-  Operands need to be in Big Endian Format
-
-Boundaries:
-  Addresses & Immediate values can only be in the range of [0,65535]
-*/
-
 export default function execute(processor: CPU, opCode: number, first: input, second: input): void {
+  let instructionMap: any = {
+    0: moveWord,
+    1: loadWord,
+    2: storeWord,
+    3: jumpIfNotZero,
+    4: userInput,
+    5: userOutput,
+    6: add,
+    7: subtract,
+    8: multiply,
+    9: divide,
+    10: bitwiseAND,
+    11: bitwiseOR,
+    12: bitwiseNOT,
+    13: compare,
+  };
 
-}
+  const func = instructionMap[opCode];
+  console.log(func);
+
+};
