@@ -52,7 +52,7 @@ const ASCII_Map: any = {
 };
 
 instructionLoader(processor);
-codeLoader(processor, "/Code.txt");
+codeLoader(processor, "/Code.asm");
 
 let CodeAddr = 4000;
 let addr = 200;
