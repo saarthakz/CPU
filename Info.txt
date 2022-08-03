@@ -1,6 +1,6 @@
 Instruction Set:
-  0: MW   regA, regB         -> regA = regB
-  1: LW   regA, imm8/addr    -> reg = imm8/RAM[addr]
+  0: MW   regA, regB         -> regA = RAM[regB]
+  1: LW   reg, imm8/addr    -> reg = imm8/RAM[addr]
   2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
   3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
   4: IN  reg/addr, 0x0       -> reg/RAM[addr] = User Input

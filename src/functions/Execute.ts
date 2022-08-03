@@ -38,7 +38,6 @@ export default async function execute(processor: CPU, opCode: number, first: inp
   };
 
   const func = instructionMap[opCode];
-
   await func(processor, first, second);
 
 };
