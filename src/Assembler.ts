@@ -57,14 +57,14 @@ let codeAddr = codeLoader(processor, "/Code.asm");
 let addr = 200;
 let instructionCount = 14;
 
-while (processor.RAM[codeAddr] != -1) {
+while (processor.RAM[codeAddr] + 1 != 0) {
 
   //Getting the Opcode and storing in Register B
   for (let opCode = 0; opCode < instructionCount; opCode++) {
     let instPtr = opCode * 16;
     let codePtr = codeAddr;
     processor.regA = 1;
-    while (processor.RAM[instPtr] != -1) {
+    while (processor.RAM[instPtr] + 1 != 0) {
       if (processor.RAM[instPtr] != processor.RAM[codePtr]) {
         processor.regA = 0;
         break;
@@ -84,28 +84,33 @@ while (processor.RAM[codeAddr] != -1) {
 
   codeAddr++;
 
-  while (processor.RAM[codeAddr] != 59) {
+  // while (processor.RAM[codeAddr] != 59) {
+  while (processor.RAM[codeAddr] - 59 != 0) {
 
-    if (processor.RAM[codeAddr] == 44) {
+    // if (processor.RAM[codeAddr] == 44) {
+    if (processor.RAM[codeAddr] - 44 == 0) {
       codeAddr++;
       continue;
     };
 
     //Immediate value or Address Value
-    if (processor.RAM[codeAddr] == 35 || processor.RAM[codeAddr] == 38) {
+    // if (processor.RAM[codeAddr] == 35 || processor.RAM[codeAddr] == 38) {
+    if (processor.RAM[codeAddr] - 35 == 0 || processor.RAM[codeAddr] - 38 == 0) {
       processor.RAM[addr] = processor.RAM[codeAddr];
       addr++;
       codeAddr++;
 
       processor.regC = processor.RAM[codeAddr] - 48;
       codeAddr++;
-      while (processor.RAM[codeAddr] != 44 && processor.RAM[codeAddr] != 59) {
+      // while (processor.RAM[codeAddr] != 44 && processor.RAM[codeAddr] != 59) {
+      while (processor.RAM[codeAddr] - 44 != 0 && processor.RAM[codeAddr] - 59 != 0) {
         processor.regC = processor.regC * 10 + (processor.RAM[codeAddr] - 48);
         codeAddr++;
       };
     }
     //Register value
-    else if (processor.RAM[codeAddr] == 64) {
+    // else if (processor.RAM[codeAddr] == 64) {
+    else if (processor.RAM[codeAddr] - 64 == 0) {
       processor.RAM[addr] = processor.RAM[codeAddr];
       addr++;
       codeAddr++;
