@@ -2,6 +2,7 @@ import fs from "node:fs";
 import { processor } from "./CPU";
 import codeLoader from "./functions/CodeLoader";
 import instructionLoader from "./functions/InstructionLoader";
+import runVM from "./functions/RunVM";
 
 const ASCII_Map: any = {
   "\n": 10,
@@ -50,10 +51,27 @@ const ASCII_Map: any = {
   "Y": 89,
   "Z": 90,
 };
+(async () => {
+  instructionLoader(processor);
+  // let inputFile = "/AssemblerV2.asm";
+  let inputFile = "/Code.asm";
+  codeLoader(processor, inputFile);
+  let outputFileName = "Output.bin";
+  // let outputFileName = "AssemblerV2.bin";
 
-instructionLoader(processor);
-codeLoader(processor, "/Code.asm");
+  await runVM(processor, "AssemblerV2.bin");
 
-let binary = [
+  console.log(processor);
 
-];
+  // let outputFileName = "Output.bin";
+  // let outputFileName = "AssemblerV2.bin";
+
+
+  // const bufferArr: number[] = [];
+
+
+  // fs.writeFileSync(outputFileName, Buffer.from([]));
+
+  // fs.writeFileSync(outputFileName, Buffer.concat([fs.readFileSync(outputFileName), Buffer.from(bufferArr)]));
+
+})();

@@ -52,14 +52,15 @@ const ASCII_Map: any = {
   "Z": 90,
 };
 
-export default async function runVM(processor: CPU) {
-  binaryLoader(processor);
+export default async function runVM(processor: CPU, binPath: string) {
+  binaryLoader(processor, binPath);
 
   while (processor.RAM[processor.PC] != -1) {
     let opCode = processor.RAM[processor.PC];
     processor.PC++;
     let first = getOperand(processor);
     let second = getOperand(processor);
+
     await execute(processor, opCode, first, second);
   };
 };

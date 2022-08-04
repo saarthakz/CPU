@@ -1,18 +1,18 @@
 Instruction Set:
-  0: MW   regA, regB         -> regA = RAM[regB]
-  1: LW   reg, imm8/addr    -> reg = imm8/RAM[addr]
-  2: SW   addr, imm8/reg     -> RAM[addr] = reg/imm8
-  3: JNZ  imm8/reg addr      -> imm8/reg != 0 ? PC = addr : PC+1
-  4: IN  reg/addr, 0x0       -> reg/RAM[addr] = User Input
-  5: OUT reg/addr, 0x0       -> Output = reg/RAM[addr]
-  6: ADD regA, imm8/regB     -> regA = regA + imm8/regB
-  7: SUB regA, imm8/regB     -> regA = regA - imm8/regB
-  8: MUL regA, imm8/regB     -> regA = regA * imm8/regB
-  9: DIV regA, imm8/regB     -> regA = regA / imm8/regB
-  A: AND  regA, imm8/regB    -> regA = regA & imm8/regB
-  B: OR   regA, imm8/regB    -> regA = regA | imm8/regB
-  C: NOT  regA, imm8/regB    -> regA = ~(imm8/regB)
-  D: CMP regA, imm8/regB     -> regA = regA == imm8/regB
+  0: MW   regA, regB             -> regA = RAM[regB]
+  1: LW   reg, imm8/addr         -> reg = imm8/RAM[addr]
+  2: SW   addr/regA, imm8/regB   -> RAM[addr/regA] = regB/imm8
+  3: JNZ  imm8/reg addr          -> imm8/reg != 0 ? PC = addr : PC+1
+  4: IN  reg/addr, 0x0           -> reg/RAM[addr] = User Input
+  5: OUT reg/addr, 0x0           -> Output = reg/RAM[addr]
+  6: ADD regA, imm8/regB         -> regA = regA + imm8/regB
+  7: SUB regA, imm8/regB         -> regA = regA - imm8/regB
+  8: MUL regA, imm8/regB         -> regA = regA * imm8/regB
+  9: DIV regA, imm8/regB         -> regA = regA / imm8/regB
+  A: AND  regA, imm8/regB        -> regA = regA & imm8/regB
+  B: OR   regA, imm8/regB        -> regA = regA | imm8/regB
+  C: NOT  regA, imm8/regB        -> regA = ~(imm8/regB)
+  D: CMP regA, imm8/regB         -> regA = regA == imm8/regB
 
 Prefix:
   # -> Immediate :35

@@ -6,18 +6,17 @@ export default function instructionLoader(processor: CPU) {
     { mnemonic: 'MW', decimal: 0, opCode: 0 },
     { mnemonic: 'LW', decimal: 1, opCode: 1 },
     { mnemonic: 'SW', decimal: 2, opCode: 2 },
-    { mnemonic: 'MOV', decimal: 3, opCode: 3 },
-    { mnemonic: 'JNZ', decimal: 4, opCode: 4 },
-    { mnemonic: 'IN', decimal: 5, opCode: 5 },
-    { mnemonic: 'OUT', decimal: 6, opCode: 6 },
-    { mnemonic: 'ADD', decimal: 7, opCode: 7 },
-    { mnemonic: 'SUB', decimal: 8, opCode: 8 },
-    { mnemonic: 'MUL', decimal: 9, opCode: 9 },
-    { mnemonic: 'DIV', decimal: 10, opCode: 10 },
-    { mnemonic: 'AND', decimal: 11, opCode: 11 },
-    { mnemonic: 'OR', decimal: 12, opCode: 12 },
-    { mnemonic: 'NOT', decimal: 13, opCode: 13 },
-    { mnemonic: 'CMP', decimal: 14, opCode: 14 }
+    { mnemonic: 'JNZ', decimal: 3, opCode: 3 },
+    { mnemonic: 'IN', decimal: 4, opCode: 4 },
+    { mnemonic: 'OUT', decimal: 5, opCode: 5 },
+    { mnemonic: 'ADD', decimal: 6, opCode: 6 },
+    { mnemonic: 'SUB', decimal: 7, opCode: 7 },
+    { mnemonic: 'MUL', decimal: 8, opCode: 8 },
+    { mnemonic: 'DIV', decimal: 9, opCode: 9 },
+    { mnemonic: 'AND', decimal: 10, opCode: 10 },
+    { mnemonic: 'OR', decimal: 11, opCode: 11 },
+    { mnemonic: 'NOT', decimal: 12, opCode: 12 },
+    { mnemonic: 'CMP', decimal: 13, opCode: 13 }
   ];
 
   instructions.forEach((instruction) => {
@@ -29,4 +28,4 @@ export default function instructionLoader(processor: CPU) {
       ctr++;
     });
   });
-}
+};

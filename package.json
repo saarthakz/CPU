@@ -4,8 +4,9 @@
     "mathjs": "^11.0.1"
   },
   "scripts": {
-    "start": "tsc && node dist/Assembler.js",
-    "test": "tsc && node dist/Test.js",
+    "asm": "tsc && node dist/Assembler.js",
+    "asm-v2": "tsc && node dist/AssemblerV2.js",
+    "view-binary": "tsc && node dist/BinaryViewer.js",
     "vm": "tsc && node dist/VM.js"
   }
 }
