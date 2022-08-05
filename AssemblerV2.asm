@@ -69,6 +69,17 @@
 4476: SW:&49152,@B; // addr = addr + 1
 4483: LW:@A,&49154; // Reg A = codeAddr
 4490: ADD:@A,#1; //Reg A++
-4497: SW:&49152,@A // codeAddr = codeAddr + 1
-4504: 
-4511: 
+4497: SW:&49154,@A // codeAddr = codeAddr + 1
+4504: LW:@A,&49154; //Reg A = codeAddr
+4511: MW:@A,@A; //Reg A = RAM[codeAddr]
+4518: SUB:@A,#48; //Getting Decimal from ASCII
+4525: SW:&60000,@C; 
+4532: LW:@C,&60000; //Reg C = RAM[codeAddr] - 48
+4539: LW:@A,&49154; // Reg A = codeAddr
+4546: ADD:@A,#1; //Reg A++
+4553: SW:&49154,@A // codeAddr = codeAddr + 1
+4560: MUL:@C,#10;
+4567: LW:@A,&49154;
+4574: MW:@A,@A;
+4581: SUB:@A,#48;
+4588: 
