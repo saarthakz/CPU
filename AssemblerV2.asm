@@ -60,7 +60,7 @@
 4413: CMP:@A,#38; // Reg A = Reg A == 38
 4420: OR:@A,@C; // Reg A = Reg A | Reg C
 4427: SUB:@A,#1; //Decrementing Reg A
-4434: JNZ:@A,&xxxx; //Jump to Register Value check
+4434: JNZ:@A,&xxxx; //Jump to Register Value check (else if statement)
 4441: LW:@A,&49154; //Reg A = codeAddr
 4448: MW:@A,@A; //Reg A = RAM[codeAddr]
 4455: LW:@B,&49152; //Reg B = addr
@@ -79,7 +79,22 @@
 4546: ADD:@A,#1; //Reg A++
 4553: SW:&49154,@A // codeAddr = codeAddr + 1
 4560: MUL:@C,#10;
-4567: LW:@A,&49154;
-4574: MW:@A,@A;
-4581: SUB:@A,#48;
-4588: 
+4567: LW:@A,&49154; // Reg A = codeAddr
+4574: MW:@A,@A; // Reg A = RAM[codeAddr]
+4581: SUB:@A,#48; // Reg = RAM[codeAddr] - 48
+4588: ADD:@C,@A; // Reg C = Reg C + Reg A
+4595: LW:@A,&49154; // Reg A = codeAddr
+4602: ADD:@A,#1; //Reg A++
+4609: SW:&49154,@A; // codeAddr = codeAddr + 1
+4616: LW:@A,&49154; // Reg A = codeAddr
+4623: LW:@B,&49154; // Reg B = codeAddr
+4630: MW:@A,@A; //Reg A = RAM[codeAddr]
+4637: MW:@B,@B; //Reg B = RAM[codeAddr]
+4644: CMP:@A,#44; //Reg A = Reg A == 44
+4651: CMP:@A,#59; //Reg B = Reg B == 59
+4658: NOT:@A,@A; //Reg A = ~RegA
+4665: NOT:@B,@B; //Reg B = ~RegB
+4672: AND:@A,@B; //Reg A = Reg & Reg B
+4679: JNZ:@A,#4560; //Jump to Reg C *= 10 if Reg A is not zero
+4686: JNZ:#1,#xxxx; //Jump to Reg D = addr, skipping the else block
+4693: 
