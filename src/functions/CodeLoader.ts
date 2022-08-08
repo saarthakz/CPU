@@ -13,6 +13,7 @@ export default function codeLoader(processor: CPU, path: string) {
 
   stringData.forEach((dataLine) => {
     dataLine = String(dataLine.split("//")[0].split(": ").pop()).trim();
+
     for (let idx = 0; idx < dataLine.length; idx++) {
       processor.RAM[codeAddr] = dataLine[idx].charCodeAt(0);
       codeAddr++;

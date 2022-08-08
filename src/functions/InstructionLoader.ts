@@ -13,10 +13,11 @@ export default function instructionLoader(processor: CPU) {
     { mnemonic: 'SUB', decimal: 7, opCode: 7 },
     { mnemonic: 'MUL', decimal: 8, opCode: 8 },
     { mnemonic: 'DIV', decimal: 9, opCode: 9 },
-    { mnemonic: 'AND', decimal: 10, opCode: 10 },
-    { mnemonic: 'OR', decimal: 11, opCode: 11 },
-    { mnemonic: 'NOT', decimal: 12, opCode: 12 },
-    { mnemonic: 'CMP', decimal: 13, opCode: 13 }
+    { mnemonic: 'MOD', decimal: 10, opCode: 10 },
+    { mnemonic: 'AND', decimal: 11, opCode: 11 },
+    { mnemonic: 'OR', decimal: 12, opCode: 12 },
+    { mnemonic: 'NOT', decimal: 13, opCode: 13 },
+    { mnemonic: 'CMP', decimal: 14, opCode: 14 }
   ];
 
   instructions.forEach((instruction) => {

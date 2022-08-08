@@ -1,63 +1,16 @@
 import fs from "node:fs";
-import { processor } from "./CPU";
+import { CPU } from "./CPU";
 import codeLoader from "./functions/CodeLoader";
 import instructionLoader from "./functions/InstructionLoader";
 
-const ASCII_Map: any = {
-  "\n": 10,
-  "\r": 13,
-  " ": 32,
-  "#": 35,
-  "&": 38,
-  ",": 44,
-  "0": 48,
-  "1": 49,
-  "2": 50,
-  "3": 51,
-  "4": 52,
-  "5": 53,
-  "6": 54,
-  "7": 55,
-  "8": 56,
-  "9": 57,
-  ":": 58,
-  ";": 59,
-  "@": 64,
-  "A": 65,
-  "B": 66,
-  "C": 67,
-  "D": 68,
-  "E": 69,
-  "F": 70,
-  "G": 71,
-  "H": 72,
-  "I": 73,
-  "J": 74,
-  "K": 75,
-  "L": 76,
-  "M": 77,
-  "N": 78,
-  "O": 79,
-  "P": 80,
-  "Q": 81,
-  "R": 82,
-  "S": 83,
-  "T": 84,
-  "U": 85,
-  "V": 86,
-  "W": 87,
-  "X": 88,
-  "Y": 89,
-  "Z": 90,
-};
-
+const processor = new CPU(new Array<number>(2 ** 16).fill(-1));
 instructionLoader(processor);
 // let inputFile = "/Code.asm";
 let inputFile = "/AssemblerV2.asm";
 let codeAddr = codeLoader(processor, inputFile);
-let addrStart = 240;
+let addrStart = 270;
 let addr = addrStart;
-let instructionCount = 14;
+let instructionCount = 15;
 // let outputFileName = "Output.bin";
 let outputFileName = "AssemblerV2.bin";
 
@@ -91,18 +44,13 @@ while (processor.RAM[codeAddr] != -1) {
 
   while (processor.RAM[codeAddr] != 59) {
 
-
-    // while (processor.RAM[codeAddr] - 59 != 0) {
-
     if (processor.RAM[codeAddr] == 44) {
-      // if (processor.RAM[codeAddr] - 44 == 0) {
       codeAddr++;
       continue;
     };
 
     //Immediate value or Address Value
     if (processor.RAM[codeAddr] == 35 || processor.RAM[codeAddr] == 38) {
-      // if (processor.RAM[codeAddr] - 35 == 0 || processor.RAM[codeAddr] - 38 == 0) {
       processor.RAM[addr] = processor.RAM[codeAddr];
       addr++;
       codeAddr++;
@@ -110,14 +58,12 @@ while (processor.RAM[codeAddr] != -1) {
       processor.regC = processor.RAM[codeAddr] - 48;
       codeAddr++;
       while (processor.RAM[codeAddr] != 44 && processor.RAM[codeAddr] != 59) {
-        // while (processor.RAM[codeAddr] - 44 != 0 && processor.RAM[codeAddr] - 59 != 0) {
         processor.regC = processor.regC * 10 + (processor.RAM[codeAddr] - 48);
-        codeAddr++;
+        codeAddr++; //Getting the decimal from ASCII
       };
     }
     //Register value
     else if (processor.RAM[codeAddr] == 64) {
-      // else if (processor.RAM[codeAddr] - 64 == 0) {
       processor.RAM[addr] = processor.RAM[codeAddr];
       addr++;
       codeAddr++;
@@ -149,7 +95,7 @@ while (processor.RAM[codeAddr] != -1) {
       processor.RAM[addr] = 0;
       addr++;
     };
-
+    // Jump back to while loop
   };
 
   codeAddr++;

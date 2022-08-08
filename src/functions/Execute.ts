@@ -13,6 +13,7 @@ import subtract from "../instructions/Subtract";
 import userInput from "../instructions/UserInput";
 import userOutput from "../instructions/UserOutput";
 import compare from "../instructions/Compare";
+import modulo from "../instructions/Modulo";
 
 type input = {
   operand: number,
@@ -31,13 +32,33 @@ export default async function execute(processor: CPU, opCode: number, first: inp
     7: subtract,
     8: multiply,
     9: divide,
-    10: bitwiseAND,
-    11: bitwiseOR,
-    12: bitwiseNOT,
-    13: compare,
+    10: modulo,
+    11: bitwiseAND,
+    12: bitwiseOR,
+    13: bitwiseNOT,
+    14: compare
+  };
+
+  let instructionStrMap: any = {
+    0: "moveWord",
+    1: "loadWord",
+    2: "storeWord",
+    3: "jumpIfNotZero",
+    4: "userInput",
+    5: "userOutput",
+    6: "add",
+    7: "subtract",
+    8: "multiply",
+    9: "divide",
+    10: "modulo",
+    11: "bitwiseAND",
+    12: "bitwiseOR",
+    13: "bitwiseNOT",
+    14: "compare"
   };
 
   const func = instructionMap[opCode];
+
   await func(processor, first, second);
 
 };

@@ -14,7 +14,6 @@ class CPU {
 
 };
 
-const processor = new CPU(new Array<number>(2 ** 16).fill(-1));
-export { processor, CPU };
+export { CPU };
 
 
