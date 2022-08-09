@@ -1,6 +1,6 @@
 const fs = require("node:fs");
 
-let data = fs.readFileSync(process.cwd() + "/AssemblerV2.asm");
+let data = fs.readFileSync(process.cwd() + "/Code.asm");
 let strData = new Array(data.length);
 
 data.forEach((val, idx) => strData[idx] = String.fromCharCode(val));
@@ -13,4 +13,4 @@ strData = strData.map((line) => {
   return temp;
 });
 
-fs.writeFileSync(process.cwd() + "/AssemblerV2.asm", strData.join(""));
+fs.writeFileSync(process.cwd() + "/Code.asm", strData.join(""));

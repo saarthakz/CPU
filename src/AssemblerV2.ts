@@ -6,6 +6,7 @@ import runVM from "./functions/RunVM";
 
 (async () => {
   const processor = new CPU(new Array<number>(2 ** 16).fill(-1));
+  const VM_Processor = new CPU(new Array<number>(2 ** 16).fill(-1));
 
   instructionLoader(processor);
   let inputFile = "/Code.asm";
@@ -25,5 +26,7 @@ import runVM from "./functions/RunVM";
   fs.writeFileSync(outputFileName, Buffer.from([]));
 
   fs.writeFileSync(outputFileName, Buffer.concat([fs.readFileSync(outputFileName), Buffer.from(bufferArr)]));
+
+  await runVM(VM_Processor, outputFileName);
 
 })();

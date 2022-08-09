@@ -4,7 +4,7 @@ import codeLoader from "./functions/CodeLoader";
 import instructionLoader from "./functions/InstructionLoader";
 
 const processor = new CPU(new Array<number>(2 ** 16).fill(-1));
-instructionLoader(processor);
+
 // let inputFile = "/Code.asm";
 let inputFile = "/AssemblerV2.asm";
 let codeAddr = codeLoader(processor, inputFile);
