@@ -9,15 +9,16 @@ Instruction Set:
   7: SUB regA, imm8/regB         -> regA = regA - imm8/regB
   8: MUL regA, imm8/regB         -> regA = regA * imm8/regB
   9: DIV regA, imm8/regB         -> regA = regA / imm8/regB
-  A: AND  regA, imm8/regB        -> regA = regA & imm8/regB
-  B: OR   regA, imm8/regB        -> regA = regA | imm8/regB
-  C: NOT  regA, imm8/regB        -> regA = ~(imm8/regB)
-  D: CMP regA, imm8/regB         -> regA = regA == imm8/regB
+  A: MOD regA, imm8/regB         -> regA = regA % imm8/regB
+  B: AND  regA, imm8/regB        -> regA = regA & imm8/regB
+  C: OR   regA, imm8/regB        -> regA = regA | imm8/regB
+  D: NOT  regA, imm8/regB        -> regA = ~(imm8/regB)
+  E: CMP regA, imm8/regB         -> regA = regA == imm8/regB
 
 Prefix:
-  # -> Immediate :35
-  & -> Address   :38
-  @ -> Register  :64
+  # -> Immediate : 35
+  & -> Address   : 38
+  @ -> Register  : 64
 
 Syntax:
   Opcode:Op1,Op2;
