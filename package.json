@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "@types/node": "^18.6.0",
+    "esbuild": "^0.19.2",
     "mathjs": "^11.0.1"
   },
   "scripts": {
@@ -8,5 +9,9 @@
     "asm-v2": "tsc && node dist/AssemblerV2.js",
     "view-binary": "tsc && node dist/BinaryViewer.js",
     "vm": "tsc && node dist/VM.js"
+  },
+  "type": "module",
+  "devDependencies": {
+    "ts-node": "^10.9.1"
   }
 }

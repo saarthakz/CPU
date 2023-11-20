@@ -1,4 +1,4 @@
-4000: SW:&49152,#270; // addr = RAM[49152] = 270, Variables will start from 49152
+4000: SW:&49152,#270; // addr = RAM[49152] = 270, Variables will start from 49152 [48 * 1024]
 4007: SW:&49154,#32768; // codeAddr = RAM[49154] = 32768
 4014: SW:&49153,#15; // instructionCount = RAM[49153] = 15
 4021: SW:&49155,#15; // opCode + 1 = RAM[49155] = 15

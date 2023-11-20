@@ -1,8 +1,8 @@
 import { CPU } from "../CPU";
 
 export default function getOperand(processor: CPU) {
-  let identifier = processor.RAM[processor.PC];
-  processor.PC++;
+  let identifier = processor.RAM[processor.PC]; // Currently PC points to identifier
+  processor.PC++; // Now the PC points to the first digit of the operand
   let operand: number;
 
   if (identifier == 64) {
@@ -10,7 +10,7 @@ export default function getOperand(processor: CPU) {
     operand = processor.RAM[processor.PC];
     processor.PC += 2;
   } else {
-    //Immediate or processor.PCess as operand
+    //Immediate or processor.PC address as operand
     let firstByte = processor.RAM[processor.PC];
     processor.PC++;
     let secondByte = processor.RAM[processor.PC];
