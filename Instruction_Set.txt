@@ -22,7 +22,7 @@ Prefix:
 
 Syntax:
   Opcode:Op1,Op2;
-  Operands need to be in Big Endian Format: Hex: [AB CD] is read as CDAB base 16 
+  Operands need to be in Big Endian Format: Hex: [AB CD] base 16 is read as CD AB base 16 
 
   NOTE: For IN, OUT, first operand is an address, second operand MUST be #0 always
 
@@ -31,6 +31,4 @@ Syntax:
 Boundaries:
   Addresses & Immediate values can only be in the range of [0,65535]
 
-Each Instruction is 7 Nibbles (4 Bits) long
-
-Make the 8008 Equivalent
+Each Instruction is 7 Bytes long

@@ -21,7 +21,7 @@ export default function instructionLoader(processor: CPU) {
   ];
 
   instructions.forEach((instruction) => {
-    const baseAddress = instruction.decimal * 16;
+    const baseAddress = instruction.decimal * 3;
     const mnemonicBytes = instruction.mnemonic.split("").map((char) => char.charCodeAt(0));
     let ctr = baseAddress;
     mnemonicBytes.forEach((byte) => {
